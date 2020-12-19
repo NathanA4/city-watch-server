@@ -23,12 +23,21 @@ export class CityInfoService {
         const fullInfo: any = await x.fullInfo();
         const content: any = await x.content();
         return {
+            fullInfo,
             name: fullInfo.general.name,
             officialName: fullInfo.general.officialName,
             motto: fullInfo.general.motto,
             summary,
-            image: rawImages.filter(image => image.title.includes(fullInfo.general.imageSkyline)).map(image => image.imageinfo).pop(),
-            content
+            image: this.getImage(rawImages, fullInfo.general.imageSkyline),
+            logo: this.getImage(rawImages, fullInfo.general.imageBlankEmblem),
+            population: fullInfo.general.populationTotal,
+            website: fullInfo.website,
+            content: content.filter(c => !['See also', 'References', 'External links'].map(g => c.title.includes(g)).reduce((a, g) => a || g, false)),
+            html: await x.html()
         };
+    }
+
+    private getImage(rawImages: Array<any>, name: any) {
+        return rawImages.filter(image => image.title.includes(name)).map(image => image.imageinfo[0]).pop();
     }
 }

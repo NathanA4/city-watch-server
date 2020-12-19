@@ -10,7 +10,7 @@ const log = new Logger(__filename);
 @CronController('test')
 export class TestCronJob {
   @Cron('test', '*/1 * * * *')
-  async removeUnverifiedUsers() {
+  async testJob() {
     log.debug('TEST');
   }
 }
