@@ -14,7 +14,7 @@ module.exports = {
             ref: 'origin/master',
             repo: 'https://github.com/ethanelliott/city-watch-server',
             path: '/var/www/production',
-            'post-deploy': 'yarn && yarn build && pm2 reload ecosystem.config.js --env production',
+            'post-deploy': 'yarn install && yarn build && pm2 reload ecosystem.config.js --env production',
         }
     }
 };
