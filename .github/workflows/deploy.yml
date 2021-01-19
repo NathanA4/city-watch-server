@@ -1,0 +1,50 @@
+name: Deploy New Version
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: git config
+        run: |
+          git config --local user.email "city-watch-bot@city-watch.ca"
+          git config --local user.name "CW Version Bot":
+      - name: install yarn
+        run: npm i -g yarn
+      - name: version patch
+        run: yarn version:patch
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ./deploy.key
+          sudo chmod 600 ./deploy.key
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+      - name: Create env file
+        run: |
+          touch .env
+          echo ${{ secrets.PROD_ENV }} >> .env
+      - name: Install PM2
+        run: npm i -g pm2
+      - name: Deploy
+        run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js production
