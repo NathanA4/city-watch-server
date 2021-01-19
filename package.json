@@ -1,6 +1,6 @@
 {
   "name": "city-watch",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "City-watch Server",
   "license": "MIT",
   "engines": {
