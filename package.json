@@ -12,9 +12,11 @@
   "scripts": {
     "build": "yarn compile && yarn build:docs",
     "build:docs": "typedoc",
-    "bump:major": "node ./scripts/bump.js --major",
-    "bump:minor": "node ./scripts/bump.js --minor",
     "compile": "tsc",
+    "version:major": "yarn version --major",
+    "version:minor": "yarn version --minor",
+    "version:patch": "yarn version --patch",
+    "postversion": "git push && git push --tags",
     "dev": "ts-node-dev --respawn --watch ./src --debug --clear --prefer-ts --inspect -- ./src/app.ts",
     "docker:build": "docker build .",
     "generate-secret": "openssl ecparam -name prime256v1 -genkey -noout -out ./key.pem",
