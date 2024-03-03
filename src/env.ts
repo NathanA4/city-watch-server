@@ -11,6 +11,7 @@ import { EnvHelpers } from './util/env-helpers';
 
 dotenv.config({path: path.join(process.cwd(), `.env${((process.env.NODE_ENV === 'test') ? '.test' : '')}`)});
 
+
 /**
  * Environment variable loader and object literal for improved auto-complete
  */
@@ -57,6 +58,6 @@ export const env = {
         enabled: EnvHelpers.getOsEnv('SWAGGER_ENABLED'),
     },
     openWeather: {
-        key: EnvHelpers.getOsEnv('OPEN_WEATHER_API_KEY'),
+        key: EnvHelpers.getOsEnv('OPEN_WEATHER_URL'),
     }
 };

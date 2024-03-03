@@ -17,7 +17,7 @@ export class CityInfoService {
 
     async getCityInfo(city: City) {
         this.log.debug('city data');
-        const x = await wiki().page(city.name);
+        const x = await wiki({ apiUrl: 'https://en.wikipedia.org/w/api.php'}).page(city.name);
         const summary: string = await x.summary();
         const rawImages: Array<any> = await x.rawImages();
         const fullInfo: any = await x.fullInfo();
@@ -28,8 +28,8 @@ export class CityInfoService {
             officialName: fullInfo.general.officialName,
             motto: fullInfo.general.motto,
             summary,
-            image: this.getImage(rawImages, fullInfo.general.imageSkyline),
-            logo: this.getImage(rawImages, fullInfo.general.imageBlankEmblem),
+            image: this.getImage(rawImages, fullInfo.general.imageSkyline, fullInfo.general.image1),
+            logo: this.getImage(rawImages, fullInfo.general.imageBlankEmblem, fullInfo.general.imageBlankEmblem),
             population: fullInfo.general.populationTotal,
             website: fullInfo.website,
             content: content.filter(c => !['See also', 'References', 'External links'].map(g => c.title.includes(g)).reduce((a, g) => a || g, false)),
@@ -37,7 +37,7 @@ export class CityInfoService {
         };
     }
 
-    private getImage(rawImages: Array<any>, name: any) {
-        return rawImages.filter(image => image.title.includes(name)).map(image => image.imageinfo[0]).pop();
+    private getImage(rawImages: Array<any>, name: any, name2: any) {
+        return rawImages.filter(image => image.title.includes(name) || image.title.includes(name2)).map(image => image.imageinfo[0]).pop();
     }
 }
